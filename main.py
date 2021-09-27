@@ -130,7 +130,7 @@ def main(args):
 
     # Set up TPUs and Estimator
     if args.tpu == "colab":
-        tpu_cluster_resolver = tf.distribute.cluster_resolver.TPUClusterResolver() if params["use_tpu"] else None
+        tpu_cluster_resolver = tf.distribute.cluster_resolver.TPUClusterResolver() #if params["use_tpu"] else None
     else:
         tpu_cluster_resolver = tf.distribute.cluster_resolver.TPUClusterResolver(args.tpu) if params["use_tpu"] else None
 
