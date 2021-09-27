@@ -258,4 +258,5 @@ def main(args):
 if __name__ == "__main__":
     tf.disable_v2_behavior()
     args = parse_args()
+    args.prompt = args.prompt.replace('"','')
     main(args)
