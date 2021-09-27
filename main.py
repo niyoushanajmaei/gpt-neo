@@ -192,7 +192,7 @@ def main(args):
     if args.predict:
         # Predict
         enc = fetch_encoder(params)
-        # args.promp is a directory in this caseù
+        # args.prompt is a directory in this case
         print(args.prompt)
         predict_wrapper(args.prompt,pred_input_fn,logger, enc, params)
         

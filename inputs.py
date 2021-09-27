@@ -158,7 +158,8 @@ def pred_input(params, logger, enc=None,
 
     dataset = dataset.map(_dummy_labels)
     #TODO is this OK?
-    return dataset[0]
+    for i, d in enumerate(dataset):
+        return d
 
 def handle_pred_output(prediction, logger, enc, params, out_name="test"):
     with tf.gfile.Open(f"{out_name}.txt", "w") as f:
