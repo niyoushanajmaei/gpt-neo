@@ -163,18 +163,18 @@ def handle_pred_output(predictions, logger, enc, params, out_name="test"):
     with tf.gfile.Open(f"{out_name}.txt", "w") as f:
         for i, p in enumerate(predictions):
             p = predictions["outputs"]
+            # remove eos + padding ids from output
+            idx = np.argmax(p == params['eos_id'])
+            if idx > 0:
+                p = p[:idx]
+            idx = np.argmax(p == params['padding_id'])
+            if idx > 0:
+                p = p[:idx]
+            text = enc.decode(p)
+            f.write(text)
+            logger.info(text)
             #only using the first prediction
             break
-        # remove eos + padding ids from output
-        idx = np.argmax(p == params['eos_id'])
-        if idx > 0:
-            p = p[:idx]
-        idx = np.argmax(p == params['padding_id'])
-        if idx > 0:
-            p = p[:idx]
-        text = enc.decode(p)
-        f.write(text)
-        logger.info(text)
 
 
 ### DEPRECATED ###
