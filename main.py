@@ -17,6 +17,7 @@ import argparse
 import json
 import numpy
 import os
+import time
 
 
 def parse_args():
@@ -191,6 +192,7 @@ def main(args):
 
     if args.predict:
         # Predict
+        start = time.time()
         enc = fetch_encoder(params)
         # args.prompt is a directory in this case
         print(args.prompt)
@@ -200,6 +202,7 @@ def main(args):
         #logger.info("Predictions generated")
         #enc = fetch_encoder(params)
         #handle_pred_output_fn(predictions, logger, enc, params, out_name=f"predictions_{args.sacred_id}_{current_step}")
+        print(f"All results generated in {time.time()-start}s")
         return
 
     def save_eval_results(task, eval_results):
