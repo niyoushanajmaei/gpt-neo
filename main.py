@@ -16,6 +16,7 @@ from tasks import task_descriptors
 import argparse
 import json
 import numpy
+import os
 
 
 def parse_args():
@@ -176,12 +177,27 @@ def main(args):
         export_model(estimator, "export", params)
         return
 
+    def predict_wrapper(dir, pred_input_fn,logger, enc, params):
+        c=0
+        for path in os.listdir(dir):
+            full_path = os.path.join(dir, path)
+            if os.path.isfile(full_path):
+                prediction = estimator.predict(input_fn=pred_input_fn)
+                logger.info(f"Prediction {c} generated")
+                handle_pred_output_fn(prediction, logger, enc, params, out_name=f"gen/predictions_{c}")
+            c+=1
+        return
+
     if args.predict:
         # Predict
-        predictions = estimator.predict(input_fn=pred_input_fn)
-        logger.info("Predictions generated")
         enc = fetch_encoder(params)
-        handle_pred_output_fn(predictions, logger, enc, params, out_name=f"predictions_{args.sacred_id}_{current_step}")
+        # args.promp is a directory in this case
+        predict_wrapper(args.prompt,pred_input_fn,logger, enc, params)
+        
+        #predictions = estimator.predict(input_fn=pred_input_fn)
+        #logger.info("Predictions generated")
+        #enc = fetch_encoder(params)
+        #handle_pred_output_fn(predictions, logger, enc, params, out_name=f"predictions_{args.sacred_id}_{current_step}")
         return
 
     def save_eval_results(task, eval_results):
