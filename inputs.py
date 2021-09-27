@@ -157,14 +157,14 @@ def pred_input(params, logger, enc=None,
         return x, x
 
     dataset = dataset.map(_dummy_labels)
-    #TODO is this OK?
-    for i, d in enumerate(dataset):
-        return d
+    return dataset
 
-def handle_pred_output(prediction, logger, enc, params, out_name="test"):
+def handle_pred_output(predictions, logger, enc, params, out_name="test"):
     with tf.gfile.Open(f"{out_name}.txt", "w") as f:
-        for i, p in enumerate(prediction):
-            p = prediction["outputs"]
+        for i, p in enumerate(predictions):
+            p = predictions["outputs"]
+            #only using the first prediction
+            break
         # remove eos + padding ids from output
         idx = np.argmax(p == params['eos_id'])
         if idx > 0:
