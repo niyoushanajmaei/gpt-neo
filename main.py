@@ -45,6 +45,7 @@ def parse_args():
     parser.add_argument("--sacred_id", type=str, default="nosacred", help="Sacred run id.")
     parser.add_argument("--entmax_sampling", action="store_true", help="(experimental) use entmax sampling")
     parser.add_argument("--export", action="store_true", help="If set, will export the model.")
+    parser.add_argument("--c", type=int, default=0, help="the number assigned to the result. suffix of the output file.")
     args = parser.parse_args()
     assert args.model is not None, "Model must be set"
     return args
@@ -178,31 +179,12 @@ def main(args):
         export_model(estimator, "export", params)
         return
 
-    def predict_wrapper(dir, pred_input_fn,logger, enc, params):
-        c=0
-        for path in os.listdir(dir):
-            full_path = os.path.join(dir, path)
-            if os.path.isfile(full_path):
-                pred_input_fn = partial(pred_input_fn, path_to_prompt=full_path, logger=logger, enc=encoder)
-                predictions = estimator.predict(input_fn=pred_input_fn)
-                logger.info(f"Prediction {c}")
-                handle_pred_output_fn(predictions, logger, enc, params, out_name=f"gen/predictions_{c}")
-            c+=1
-        return
-
     if args.predict:
         # Predict
-        start = time.time()
+        predictions = estimator.predict(input_fn=pred_input_fn)
+        logger.info("Predictions generated")
         enc = fetch_encoder(params)
-        # args.prompt is a directory in this case
-        print(args.prompt)
-        predict_wrapper(args.prompt,pred_input_fn,logger, enc, params)
-        
-        #predictions = estimator.predict(input_fn=pred_input_fn)
-        #logger.info("Predictions generated")
-        #enc = fetch_encoder(params)
-        #handle_pred_output_fn(predictions, logger, enc, params, out_name=f"predictions_{args.sacred_id}_{current_step}")
-        print(f"All results generated in {time.time()-start}s")
+        handle_pred_output_fn(predictions, logger, enc, params, out_name=f"gen/product{args.c}")
         return
 
     def save_eval_results(task, eval_results):
