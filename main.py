@@ -183,9 +183,9 @@ def main(args):
             full_path = os.path.join(dir, path)
             if os.path.isfile(full_path):
                 pred_input_fn = partial(pred_input_fn, path_to_prompt=full_path, logger=logger, enc=encoder)
-                prediction = estimator.predict(input_fn=pred_input_fn)
-                logger.info(f"Prediction {c} generated")
-                handle_pred_output_fn(prediction, logger, enc, params, out_name=f"gen/predictions_{c}")
+                predictions = estimator.predict(input_fn=pred_input_fn)
+                logger.info(f"Prediction {c}")
+                handle_pred_output_fn(predictions, logger, enc, params, out_name=f"gen/predictions_{c}")
             c+=1
         return
 
