@@ -160,7 +160,7 @@ def pred_input(params, logger, enc=None,
     return dataset
 
 def handle_pred_output(predictions, logger, enc, params, out_name="test"):
-    with tf.gfile.Open(f"{out_name}.txt", "w") as f:
+    with tf.gfile.Open(out_name, "w") as f:
         for i, p in enumerate(predictions):
             p = p["outputs"]
             # remove eos + padding ids from output

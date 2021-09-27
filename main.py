@@ -45,7 +45,6 @@ def parse_args():
     parser.add_argument("--sacred_id", type=str, default="nosacred", help="Sacred run id.")
     parser.add_argument("--entmax_sampling", action="store_true", help="(experimental) use entmax sampling")
     parser.add_argument("--export", action="store_true", help="If set, will export the model.")
-    parser.add_argument("--c", type=int, default=0, help="the number assigned to the result. suffix of the output file.")
     args = parser.parse_args()
     assert args.model is not None, "Model must be set"
     return args
@@ -184,7 +183,8 @@ def main(args):
         predictions = estimator.predict(input_fn=pred_input_fn)
         logger.info("Predictions generated")
         enc = fetch_encoder(params)
-        handle_pred_output_fn(predictions, logger, enc, params, out_name=f"gen/product{args.c}")
+        out = args.prompt.replace('test','gen')
+        handle_pred_output_fn(predictions, logger, enc, params, out_name=out)
         return
 
     def save_eval_results(task, eval_results):
