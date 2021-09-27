@@ -162,8 +162,8 @@ def pred_input(params, logger, enc=None,
 
 def handle_pred_output(prediction, logger, enc, params, out_name="test"):
     with tf.gfile.Open(f"{out_name}.txt", "w") as f:
-        #for i, p in enumerate(predictions):
-        p = prediction["outputs"]
+        for i, p in enumerate(prediction):
+            p = prediction["outputs"]
         # remove eos + padding ids from output
         idx = np.argmax(p == params['eos_id'])
         if idx > 0:
