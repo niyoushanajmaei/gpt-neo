@@ -130,7 +130,7 @@ def main(args):
 
     # Set up TPUs and Estimator
     if args.tpu == "colab":
-        tpu_cluster_resolver = tf.distribute.cluster_resolver.TPUClusterResolver() #if params["use_tpu"] else None
+        tpu_cluster_resolver = tf.distribute.cluster_resolver.TPUClusterResolver() if params["use_tpu"] else None
     else:
         tpu_cluster_resolver = tf.distribute.cluster_resolver.TPUClusterResolver(args.tpu) if params["use_tpu"] else None
 
@@ -192,7 +192,8 @@ def main(args):
     if args.predict:
         # Predict
         enc = fetch_encoder(params)
-        # args.promp is a directory in this case
+        # args.promp is a directory in this caseù
+        print(args.prompt)
         predict_wrapper(args.prompt,pred_input_fn,logger, enc, params)
         
         #predictions = estimator.predict(input_fn=pred_input_fn)
