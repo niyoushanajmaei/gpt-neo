@@ -159,7 +159,7 @@ def pred_input(params, logger, enc=None,
     dataset = dataset.map(_dummy_labels)
     return dataset
 
-def handle_pred_output(predictions, enc, params, out_name="test"):
+def handle_pred_output(predictions, logger, enc, params, out_name="test"):
     with tf.gfile.Open(out_name, "w") as f:
         for i, p in enumerate(predictions):
             p = p["outputs"]
@@ -172,7 +172,7 @@ def handle_pred_output(predictions, enc, params, out_name="test"):
                 p = p[:idx]
             text = enc.decode(p)
             f.write(text)
-            #logger.info(text)
+            logger.info(text)
             #only using the first prediction
             break
 
